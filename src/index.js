@@ -19,11 +19,6 @@ function quitHandler (event) {};
 let editorWindow;
 let previewWindow;
 
-// event handlers
-function handleUpdatePreview() {
-  editorWindow.webContents.send("editor-content");
-}
-
 ipcMain.on("editor-content", function(event, data) {
   previewWindow.webContents.send("editor-content", data);
 });
@@ -42,11 +37,34 @@ app.on("ready", function() {
       ]
     },
     {
+      label: "Ablage",
+      submenu: [
+        {
+          label: "Sichern",
+          accelerator: "Ctrl+S",
+          click: () => { editorWindow.webContents.send("editor-content") }
+        }
+      ]
+    },
+    {
       label: "Actions",
       submenu: [
         {
           label: "Update preview",
-          click: handleUpdatePreview
+          click: () => { editorWindow.webContents.send("editor-content") }
+        }
+      ]
+    },
+    {
+      label: "Windows",
+      submenu: [
+        {
+          label: "Editor",
+          click: () => { editorWindow.focus() }
+        },
+        {
+          label: "Preview",
+          click: () => { previewWindow.focus() }
         }
       ]
     }
